@@ -4,11 +4,8 @@ const express = require("express");
 const cors = require("cors");
 const routes = require("./routes/index.route");
 const mongoose = require("mongoose");
-const swaggerUI = require("swagger-ui-express");
-const YAML = require("yamljs");
-const swaggerDocs = YAML.load("./swagger.yaml");
 
-const { MONGO_URL, API_PORT } = process.env;
+const { MONGO_URL, API_PORT, NODE_SWAGGER } = process.env;
 
 const app = express();
 const PORT = API_PORT;
@@ -16,7 +13,14 @@ const PORT = API_PORT;
 app.use(express.json());
 app.use(cors());
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+// app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+if (NODE_ENV === "development") {
+  const swaggerUI = require("swagger-ui-express");
+  const YAML = require("yamljs");
+  const swaggerDocs = YAML.load("./swagger.yaml");
+
+  app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
+}
 
 mongoose.connect(MONGO_URL).catch((err) => {
   if (err) {
