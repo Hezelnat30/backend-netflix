@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 // app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
-if (NODE_ENV === "development") {
+if (NODE_SWAGGER === "development") {
   const swaggerUI = require("swagger-ui-express");
   const YAML = require("yamljs");
   const swaggerDocs = YAML.load("./swagger.yaml");
